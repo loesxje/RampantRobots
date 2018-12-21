@@ -6,7 +6,14 @@ namespace RampantRobots
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Factory factoryhall = new Factory(5, 10, 3, 3);
+            Mechanic Bob = new Mechanic(1,1);
+
+            factoryhall.Draw(Bob);
+            factoryhall.MoveMechanic();
+            
+            
+            Console.ReadLine();
         }
     }
 }
