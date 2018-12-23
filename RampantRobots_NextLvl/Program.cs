@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using RampantRobots_NextLvl.Classes;
 using RampantRobots_NextLvl.Service;
 
@@ -6,24 +7,22 @@ namespace RampantRobots_NextLvl
 {
     class Program
     {
-        private static IBoardService _boardService;
-        private static IPlayerService _playerService;
-
-        public Program(IBoardService boardService,IPlayerService playerService)
-        {
-            _boardService = boardService;
-            _playerService = playerService;
-        }
-
         static void Main(string[] args)
         {
-            var player = _playerService.Create(1, 1);
-            var board = _boardService.Create(5,10,3,3,player);
+            var gameService = GetGameService();
 
-            _boardService.Draw(player, board);
-            _boardService.MovePlayer(player, board);
+            gameService.Initialize();
+            gameService.Run();
 
             Console.ReadLine();
+        }
+
+        private static GameService GetGameService()
+        {
+            var playerService = new PlayerService();
+            var boardService = new BoardService(playerService);
+
+            return new GameService(boardService, playerService);
         }
     }
 }

@@ -80,8 +80,7 @@ namespace RampantRobots_NextLvl.Service
                 var move = Console.ReadLine();
                 _playerService.Move(move, player);
                 Draw(player, board);
-
-                Console.WriteLine(String.Format("You've got {0} turns left.", board.Turns - i));
+                Console.WriteLine($"You've got {board.Turns - i} turns left.");
             }
         }
 

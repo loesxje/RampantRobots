@@ -13,10 +13,8 @@ namespace RampantRobots_NextLvl.Service
 
     public class PlayerService : IPlayerService
     {
-
         public Player Create(int xPos, int yPoss)
         {
-
             return new Player
             {
                 XPos = xPos,
