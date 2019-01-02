@@ -6,6 +6,7 @@ namespace RampantRobots
 {
     class Robot
     {
+        static Random random = new Random();
         public int xPos { get; set; }
         public int yPos { get; set; }
 
@@ -21,6 +22,32 @@ namespace RampantRobots
                 return false;
 
             return (this.xPos == ((Robot)obj).xPos & this.yPos == ((Robot)obj).yPos);
+        }
+
+        public void Move(string moves)
+        {
+            for (int i = 0; i < moves.Length; i++)
+            {
+                int rand = random.Next(1,4);
+                switch (rand)
+                {
+                    case 1:
+                        xPos++;
+                        break;
+                    case 2:
+                        xPos--;
+                        break;
+                    case 3:
+                        yPos++;
+                        break;
+                    case 4:
+                        yPos--;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
         }
     }
 }
