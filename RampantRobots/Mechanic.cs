@@ -21,26 +21,24 @@ namespace RampantRobots
         {
             for (int i = 0; i < moves.Length; i++)
             {
-                if (moves[i] == 'w')
+                switch (moves[i])
                 {
-                    yPos--;
-                }
-                else if (moves[i] == 's')
-                {
-                    yPos++;
-                }
-                else if (moves[i] == 'a')
-                {
-                    xPos--;
-                }
-                else if (moves[i] == 'd')
-                {
-                    xPos++;
-                }
-                else
-                {
-                    Console.WriteLine("You gave in some wrong input.  Move only with the w,a,s,d keys.");
-                }
+                    case 'w':
+                        yPos--;
+                        break;
+                    case 's':
+                        yPos++;
+                        break;
+                    case 'a':
+                        xPos--;
+                        break;
+                    case 'd':
+                        xPos++;
+                        break;
+                    default:
+                        Console.WriteLine("You gave in some wrong input.  Move only with the w,a,s,d keys.");
+                        break;
+                }                   
             }
             
         }
