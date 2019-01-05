@@ -28,7 +28,7 @@ namespace RampantRobots
         {
             for (int i = 0; i < moves.Length; i++)
             {
-                int rand = random.Next(1,4);
+                int rand = random.Next(1,5);
                 switch (rand)
                 {
                     case 1:

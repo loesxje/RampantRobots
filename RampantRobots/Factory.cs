@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace RampantRobots
 {
@@ -70,27 +71,43 @@ namespace RampantRobots
 
                 MoveRobots(moves);
 
+                Console.Clear();
+
                 Draw(Bob);
                 Console.WriteLine(String.Format("You've got {0} turns left.", turns));
-
                 return moves;
         }
 
         public void MoveRobots(string moves)
         {
-            for (int i = 0; i <= robots.Count-1; i++)
-            {
-                robots[i].Move(moves);
+            int[] originalxPos = new int[robots.Count];
+            int[] originalyPos = new int[robots.Count];
 
-                // Don't let the robot go out of bounds
-                if (robots[i].yPos < 1)
-                    robots[i].yPos = 1;
-                else if (robots[i].xPos < 1)
-                    robots[i].xPos = 1;
-                else if (robots[i].yPos > Height)
-                    robots[i].yPos = Height;
-                else if (robots[i].xPos > Width)
-                    robots[i].xPos = Width;
+            for (int i = robots.Count - 1; i >= 0; i--)
+            {
+                originalxPos[i] = robots[i].xPos;
+                originalyPos[i] = robots[i].yPos;
+
+                robots[i].Move(moves);
+            }
+
+            for (int i = 0; i < robots.Count; i++)
+            {
+                for (int j = 0; j < robots.Count; j++) // laatste robot wordt niet gecheckt
+                {
+                    if (i != j)
+                    {
+                        // Don't let the robots stand on eachother and dont let them go out of bounds
+                        while ((robots[i].xPos == robots[j].xPos) & (robots[i].yPos == robots[j].yPos) |
+                              (robots[i].yPos < 1) | (robots[i].xPos < 1) | (robots[i].yPos > Height) | (robots[i].xPos > Width))
+                        {
+                            // If so, make a new move for this robot with original positions
+                            robots[i].xPos = originalxPos[i];
+                            robots[i].yPos = originalyPos[i];
+                            robots[i].Move(moves);
+                        }
+                    }
+                }
             }
             KillRobot();
         }
@@ -105,13 +122,22 @@ namespace RampantRobots
         }
 
         // TO DO: 
+        // Add a notice if the player has won.
+        // Stop the game if the player has won.
+        // Maybe add a highscore??
+        // Add a description of the game in the beginnen. ( and maybe don't clear that description )
+
+        // DOING:
+
+        // DONE 05-01-2019
+        // Keep track of turns
+        // Maybe refresh output instead of putting it under it (clear screen somehow, then Draw() method)
+        // I think the robots can stand on top of each other. Woopsie daisy..
+
+        // DONE 02-01-2019
         // Mechanic not out of bounds
         // Mechanic can stand on Robot, but Robot don't dissappear (after draw (if Bob.Pos == robots.Pos --> delete that robot)
         // Robots don't move (per length moves, make random +- 1 in xPos or yPos of robots)
         // Robots can go out of bounds (robots.Pos& Bob.Pos < Heigth / Width)
-
-        // Maybe refresh output instead of putting it under it (clear screen somehow, then Draw() method)
-        // Keep track of turns
-        // I think the robots can stand on top of each other. Woopsie daisy..
     }
 }

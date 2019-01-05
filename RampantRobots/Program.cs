@@ -13,7 +13,7 @@ namespace RampantRobots
             factoryhall.Draw(Bob);
             for (int i = 1; i <= Turns; i++)
             {
-                string moves = factoryhall.MoveMechanic(Turns);
+                string moves = factoryhall.MoveMechanic(Turns+1-i);
             }
             
             
