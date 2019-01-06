@@ -53,10 +53,51 @@ namespace RampantRobots
 
         }
 
-        public string MoveMechanic(int turns)
+        public void PlayRound(int turns, bool win)
         {
-                Console.WriteLine("Press Enter to continue");
-                string moves = Console.ReadLine();
+            Console.WriteLine("Press Enter to continue");
+            string moves = Console.ReadLine();
+
+            MoveMechanic(moves, turns);
+            MoveRobots(moves);
+
+            Console.Clear();
+
+            Draw(Bob);
+            Console.WriteLine(String.Format("You've got {0} turns left.", turns));
+
+            bool won = WinCheck(turns, win);
+            NewGame(won);
+        }
+
+        public void Run()
+        {
+            Console.Clear();
+
+            PrintDescription();
+
+            Mechanic Bob = new Mechanic(1, 1);
+            int Turns = 50;
+            bool win = false;
+
+            Draw(Bob);
+            for (int i = 1; i <= Turns; i++)
+            {
+                PlayRound(Turns - i, win);
+            }
+
+            Console.ReadLine();
+        }
+
+        public void PrintDescription()
+        {
+            Console.WriteLine("Welcome to Rampant Robots.\n" +
+                "The objective for this game is to reach and save all the robots, by giving them oil, before time runs out.\n" +
+                "So you have to move quick!\nBut be aware that the robots also move when you do.\nGood luck out there!\n");
+        }
+
+        public void MoveMechanic(string moves, int turns)
+        {
                 Bob.Move(moves);
 
                 // Don't let Bob go out of bounds
@@ -68,14 +109,6 @@ namespace RampantRobots
                     Bob.yPos = Height;
                 else if (Bob.xPos > Width)
                     Bob.xPos = Width;
-
-                MoveRobots(moves);
-
-                Console.Clear();
-
-                Draw(Bob);
-                Console.WriteLine(String.Format("You've got {0} turns left.", turns));
-                return moves;
         }
 
         public void MoveRobots(string moves)
@@ -91,9 +124,16 @@ namespace RampantRobots
                 robots[i].Move(moves);
             }
 
+            CorrectRobots(originalxPos, originalyPos, moves);
+            
+            KillRobot();
+        }
+        
+        public void CorrectRobots(int[] originalxPos, int[] originalyPos, string moves)
+        {
             for (int i = 0; i < robots.Count; i++)
             {
-                for (int j = 0; j < robots.Count; j++) // laatste robot wordt niet gecheckt
+                for (int j = 0; j < robots.Count; j++)
                 {
                     if (i != j)
                     {
@@ -107,9 +147,18 @@ namespace RampantRobots
                             robots[i].Move(moves);
                         }
                     }
+                    else if (robots.Count == 1)
+                    {
+                        while ((robots[i].yPos < 1) | (robots[i].xPos < 1) | (robots[i].yPos > Height) | (robots[i].xPos > Width))
+                        {
+                            // If so, make a new move for this robot with original positions
+                            robots[i].xPos = originalxPos[i];
+                            robots[i].yPos = originalyPos[i];
+                            robots[i].Move(moves);
+                        }
+                    }
                 }
             }
-            KillRobot();
         }
 
         public void KillRobot()
@@ -121,13 +170,47 @@ namespace RampantRobots
             }
         }
 
+        public bool WinCheck(int turns, bool win)
+        {
+            if (robots.Count == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("YOU'VE WON!");
+                Console.WriteLine("You've had {0} turns left.", turns);
+                win = true;
+            }
+
+            return win;
+        }
+
+        public void NewGame(bool win)
+        {
+            if (win == true & robots.Count == 0)
+            {
+                Console.WriteLine("Do you want to play again? (y/n)");
+                string newgame = Console.ReadLine();
+
+                if (newgame == "y")
+                    Run();
+                else if (newgame == "n")
+                {
+                    Console.WriteLine("Thanks for playing Rampant Robots!");
+                    Console.ReadLine();
+                    Environment.Exit(1);
+                }
+            }
+        }
+
         // TO DO: 
-        // Add a notice if the player has won.
-        // Stop the game if the player has won.
         // Maybe add a highscore??
-        // Add a description of the game in the beginnen. ( and maybe don't clear that description )
 
         // DOING:
+        // Clean up code
+
+        // DONE 06-01-2019
+        // Add a notice if the player has won.
+        // Stop the game if the player has won.
+        // Add a description of the game in the beginning. ( and maybe don't clear that description )
 
         // DONE 05-01-2019
         // Keep track of turns

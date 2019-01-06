@@ -11,6 +11,7 @@ namespace RampantRobots
         public int yPos { get; set; }
         public int moves { get; set; }
 
+        // Constructor
         public Mechanic(int xPosition, int yPosition)
         {
             xPos = xPosition;
