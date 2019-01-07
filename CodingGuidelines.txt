@@ -1,0 +1,20 @@
+Class program
+
+1/
+var is een sterkere container dan voor alle aangemaakte variabele specifieke containers te maken
+
+ Factory factoryhall = new Factory(5, 10, 3, 3);
+==>
+ var factoryhall = new Factory(5, 10, 3, 3);
+
+ 2/
+ variabele nooit met hoofdleter!
+
+ 3/
+ In constructors geen spaties
+
+ (5, 10, 1, 1) ==> (5,10,1,1)
+
+
+ 4/ 
+ enkele <br/> mag , not 2 blank lines
