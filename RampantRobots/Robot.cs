@@ -52,5 +52,10 @@ namespace RampantRobots
 
             return (this.xPos == ((Robot)obj).xPos & this.yPos == ((Robot)obj).yPos);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
