@@ -6,10 +6,8 @@ namespace RampantRobots
     { 
         static void Main(string[] args)
         {
-            Factory factoryhall = new Factory(5, 10, 1);
+            Factory factoryhall = new Factory(5, 10, 3, 50, true);
             factoryhall.Run();
-
-
         }
     }
 }

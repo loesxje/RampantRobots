@@ -17,29 +17,31 @@ namespace RampantRobots
             yPos = yPosition;
         }
 
-        public void Move(string moves)
+        public void Move(string moves, bool robotsMove)
         {
             for (int i = 0; i < moves.Length; i++)
             {
-                int rand = random.Next(1,5);
-                switch (rand)
+                if (robotsMove)
                 {
-                    case 1:
-                        xPos++;
-                        break;
-                    case 2:
-                        xPos--;
-                        break;
-                    case 3:
-                        yPos++;
-                        break;
-                    case 4:
-                        yPos--;
-                        break;
-                    default:
-                        break;
+                    int rand = random.Next(1, 5);
+                    switch (rand)
+                    {
+                        case 1:
+                            xPos++;
+                            break;
+                        case 2:
+                            xPos--;
+                            break;
+                        case 3:
+                            yPos++;
+                            break;
+                        case 4:
+                            yPos--;
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
             }
         }
 

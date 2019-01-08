@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 
 namespace RampantRobots
 {
     class Factory
     {
-        static Random random = new Random(42);
+        static Random random = new Random();
         public int Height { get; set; }
         public int Width { get; set; }
         Mechanic Bob = new Mechanic(1, 1);
         public List<Robot> robots;
+        public int Turns { get; set; }
+        public bool Robotsmove { get; set; }
     
 
         // Constructor
-        public Factory(int height, int width, int xRobots)
+        public Factory(int height, int width, int xRobots, int turns, bool robotsMove)
         {
+            Robotsmove = robotsMove;
+            Turns = turns;
             Height = height;
             Width = width;
             robots = new List<Robot>();
@@ -37,10 +40,10 @@ namespace RampantRobots
 
             for (int h = 1; h <= Height; h++)
             {
-                for (int l = 1; l <= Width; l++)
+                for (int w = 1; w <= Width; w++)
                 {
-                    var locRobot = new Robot(l, h);
-                    if (Bob.xPos == l & Bob.yPos == h)
+                    var locRobot = new Robot(w, h);
+                    if (Bob.xPos == w & Bob.yPos == h)
                         sb.Append('M');
                     else if (robots.Contains(locRobot))
                         sb.Append('R');
@@ -58,7 +61,7 @@ namespace RampantRobots
             Console.WriteLine("Press Enter to continue");
             string moves = Console.ReadLine();
 
-            MoveMechanic(moves, turns);
+            MoveMechanic(moves);
             MoveRobots(moves);
 
             Console.Clear();
@@ -66,8 +69,15 @@ namespace RampantRobots
             Draw(Bob);
             Console.WriteLine(String.Format("You've got {0} turns left.", turns));
 
-            bool won = WinCheck(turns, win);
-            NewGame(won);
+            if (turns == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("YOU'VE LOST!");
+                NewGame(win, turns);
+            }
+
+            win = WinCheck(win, turns);
+            NewGame(win, turns);
         }
 
         public void Run()
@@ -77,13 +87,12 @@ namespace RampantRobots
             PrintDescription();
 
             Mechanic Bob = new Mechanic(1, 1);
-            int Turns = 50;
             bool win = false;
 
             Draw(Bob);
-            for (int i = 1; i <= Turns; i++)
+            for (int i = Turns-1; i >= 0; i--)
             {
-                PlayRound(Turns - i, win);
+                PlayRound(i, win);
             }
 
             Console.ReadLine();
@@ -96,7 +105,7 @@ namespace RampantRobots
                 "So you have to move quick!\nBut be aware that the robots also move when you do.\nGood luck out there!\n");
         }
 
-        public void MoveMechanic(string moves, int turns)
+        public void MoveMechanic(string moves)
         {
                 Bob.Move(moves);
 
@@ -121,7 +130,7 @@ namespace RampantRobots
                 originalxPos[i] = robots[i].xPos;
                 originalyPos[i] = robots[i].yPos;
 
-                robots[i].Move(moves);
+                robots[i].Move(moves, Robotsmove);
             }
 
             CorrectRobots(originalxPos, originalyPos, moves);
@@ -144,7 +153,7 @@ namespace RampantRobots
                             // If so, make a new move for this robot with original positions
                             robots[i].xPos = originalxPos[i];
                             robots[i].yPos = originalyPos[i];
-                            robots[i].Move(moves);
+                            robots[i].Move(moves, Robotsmove);
                         }
                     }
                     else if (robots.Count == 1)
@@ -154,7 +163,7 @@ namespace RampantRobots
                             // If so, make a new move for this robot with original positions
                             robots[i].xPos = originalxPos[i];
                             robots[i].yPos = originalyPos[i];
-                            robots[i].Move(moves);
+                            robots[i].Move(moves, Robotsmove);
                         }
                     }
                 }
@@ -170,7 +179,7 @@ namespace RampantRobots
             }
         }
 
-        public bool WinCheck(int turns, bool win)
+        public bool WinCheck(bool win, int turns)
         {
             if (robots.Count == 0)
             {
@@ -183,15 +192,19 @@ namespace RampantRobots
             return win;
         }
 
-        public void NewGame(bool win)
+        public void NewGame(bool win, int turns)
         {
-            if (win == true & robots.Count == 0)
+            if (win == true | turns == 0)
             {
                 Console.WriteLine("Do you want to play again? (y/n)");
                 string newgame = Console.ReadLine();
 
                 if (newgame == "y")
-                    Run();
+                {
+                    // I'd prefer to go directly to Main() or Program.cs
+                    Factory factoryhall = new Factory(5, 10, 3, 10, true);
+                    factoryhall.Run();
+                }
                 else if (newgame == "n")
                 {
                     Console.WriteLine("Thanks for playing Rampant Robots!");
@@ -202,10 +215,15 @@ namespace RampantRobots
         }
 
         // TO DO: 
-        // Maybe add a highscore??
 
         // DOING:
         // Clean up code
+
+        // DONE 08-01-2019
+        // arg turns in Factory()
+        // arg moveRobots in Factory()
+        // "you lose" sign if out of turns
+        // No robots at restart
 
         // DONE 06-01-2019
         // Add a notice if the player has won.
